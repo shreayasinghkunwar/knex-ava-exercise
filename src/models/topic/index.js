@@ -1,15 +1,15 @@
-const { knex } = require('../../database');
-const { WEEK_TABLE_NAME } = require('../week');
+const { knex } = require("../../database");
+const { WEEK_TABLE_NAME } = require("../week");
 
-const TOPIC_TABLE_NAME = 'topics';
+const TOPIC_TABLE_NAME = "topics";
 
-function insertForWeek (weekNumber, topicName) {
+function insertForWeek(weekNumber, topicName) {
   return knex(TOPIC_TABLE_NAME)
     .insert({ week_number: weekNumber, name: topicName })
-    .returning('*');
+    .returning("*");
 }
 
-function searchTopicWithWeekData (searchTerm) {
+function searchTopicWithWeekData(searchTerm) {
   return knex(TOPIC_TABLE_NAME)
     .select(`${TOPIC_TABLE_NAME}.*`)
     .select(`${WEEK_TABLE_NAME}.name as week_name`)
@@ -17,26 +17,26 @@ function searchTopicWithWeekData (searchTerm) {
       WEEK_TABLE_NAME,
       `${TOPIC_TABLE_NAME}.week_number`,
       `${WEEK_TABLE_NAME}.number`
-    ).where(
-      `${TOPIC_TABLE_NAME}.name`, 'LIKE', `%${searchTerm}%`
-    );
+    )
+    .where(`${TOPIC_TABLE_NAME}.name`, "LIKE", `%${searchTerm}%`);
 }
 
 /**
  * @param {string} id
  * @param {{ name?: string, week_number?: number }} updateData
  */
-function updateTopicById (id, updateData) {
-  return knex(TOPIC_TABLE_NAME)
-    .update(updateData)
-    .where({ id })
-    .returning('*')
+function updateTopicById(id, updateData) {
+  return knex(TOPIC_TABLE_NAME).update(updateData).where({ id }).returning("*");
 }
 
-function deleteTopicById (id) {
-  return knex(TOPIC_TABLE_NAME)
-    .where({ id })
-    .del()
+function deleteTopicById(id) {
+  return knex(TOPIC_TABLE_NAME).where({ id }).del();
 }
 
-module.exports = { insertForWeek, searchTopicWithWeekData, updateTopicById, deleteTopicById, TOPIC_TABLE_NAME }
+module.exports = {
+  insertForWeek,
+  searchTopicWithWeekData,
+  updateTopicById,
+  deleteTopicById,
+  TOPIC_TABLE_NAME,
+};

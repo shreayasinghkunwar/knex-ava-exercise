@@ -15,7 +15,7 @@ npx knex migrate:latest
 ```
 
 ### Prepare Environment
-Create a new file named `.env` and add the following to it:
+Create a new file named `.env` on the project root (the same level/folder as package.json) and add the following to it:
 ```
 DATABASE_CONNECTION_STRING=url://connection@string/to/postgress/database
 ```

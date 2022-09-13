@@ -68,7 +68,9 @@ Read [this link](https://github.com/avajs/ava/blob/main/docs/03-assertions.md) f
 
 Take a look at the [week test file](./src/models/week/index.test.js) for an example. But remember that you will need to modify these tests.
 
-#### Relationship Modeling
+#### Relationship Modeling (Just Pick One to Understand)
 https://www.tutorialsteacher.com/sqlserver/tables-relations
+
 https://stackoverflow.com/questions/7296846/how-to-implement-one-to-one-one-to-many-and-many-to-many-relationships-while-de
+
 https://blog.devart.com/types-of-relationships-in-sql-server-database.html

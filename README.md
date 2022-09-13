@@ -1,5 +1,3 @@
-## Project Scripts
-
 ## Project Setup
 
 ### Install Dependencies
@@ -22,9 +20,9 @@ Create a new file named `.env` and add the following to it:
 DATABASE_CONNECTION_STRING=url://connection@string/to/postgress/database
 ```
 
-### Scripts
+## Scripts
 
-## Running Tests
+### Running Tests
 ```
 npm test
 ```
@@ -54,7 +52,7 @@ FORK this repository before starting to do anything. There is a `Fork` button at
 6. Run week tests and see them fail. Modify the tests to meet the new requirements.
 7. Write tests for instructors model covering at least creation, read, update and deletion (CRUD). You will be using your database as a test database.
 
-### Resources
+## Resources
 
 #### Knex Migrations
 https://knexjs.org/guide/migrations.html - Dealing with Knex migrations

@@ -26,7 +26,7 @@ DATABASE_CONNECTION_STRING=url://connection@string/to/postgress/database
 ```
 npm test
 ```
-Look under `scripts.test` to see how this is set up.
+Look under `scripts.test` in `package.json` to see how this is set up.
 
 We clear database before running the test so that we always have a clean database to work with and don't end up getting errors for repeating a primary key.
 
@@ -56,6 +56,7 @@ FORK this repository before starting to do anything. There is a `Fork` button at
 
 #### Knex Migrations
 https://knexjs.org/guide/migrations.html - Dealing with Knex migrations
+
 https://knexjs.org/guide/schema-builder.html#createtable - Knex Schema Builder
 
 #### Writing Tests

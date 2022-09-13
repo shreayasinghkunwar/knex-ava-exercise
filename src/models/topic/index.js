@@ -33,4 +33,10 @@ function updateTopicById (id, updateData) {
     .returning('*')
 }
 
-module.exports = { insertForWeek, searchTopicWithWeekData, updateTopicById, TOPIC_TABLE_NAME }
+function deleteTopicById (id) {
+  return knex(TOPIC_TABLE_NAME)
+    .where({ id })
+    .del()
+}
+
+module.exports = { insertForWeek, searchTopicWithWeekData, updateTopicById, deleteTopicById, TOPIC_TABLE_NAME }

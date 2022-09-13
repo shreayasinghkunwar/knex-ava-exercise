@@ -1,5 +1,5 @@
-const { knex } = require('../database');
-const { WEEK_TABLE_NAME } = require('./week');
+const { knex } = require('../../database');
+const { WEEK_TABLE_NAME } = require('../week');
 
 const TOPIC_TABLE_NAME = 'topics';
 
@@ -33,4 +33,4 @@ function updateTopicById (id, updateData) {
     .returning('*')
 }
 
-module.exports = { insertForWeek, searchTopicWithWeekData, updateTopicById }
+module.exports = { insertForWeek, searchTopicWithWeekData, updateTopicById, TOPIC_TABLE_NAME }

@@ -124,6 +124,48 @@ test.serial("updateTopicById > Returns the updated topic", async (t) => {
   }]
 
   t.deepEqual(updated_topic, expectedResult, "Must return updated topic")
+});
 
+test.serial("updateTopicById > Updates a topic", async (t) => {
+  const instructor = await getInstructor("Ramesh KC")
+  const week = await insertWeek(1, "Week #1", instructor.id)
+  const inserted_topic = await topicModel.insertForWeek(1, "HTML & CSS");
+
+  await topicModel.updateTopicById(inserted_topic[0].id,
+    { name: "HTML, CSS & JS" });
+
+  const updated_topic = await knex(topicModel.TOPIC_TABLE_NAME).where(
+    'id',
+    inserted_topic[0].id
+  )
+  t.deepEqual(updated_topic, [{
+    id: inserted_topic[0].id,
+    name: "HTML, CSS & JS",
+    week_number: 1
+  }], "Must return updated topic")
 
 });
+
+test.serial(
+
+  "searchTopicWithWeekData > Returns topics matching the passed string", async (t) => {
+    t.plan(2);
+    const instructor = await getInstructor("Ramesh KC")
+    const week = await insertWeek(1, "Week #1", instructor.id)
+    const inserted_topic = await topicModel.insertForWeek(1, "HTML & CSS");
+    const searchResult = await topicModel.searchTopicWithWeekData("HTML & CSS");
+    console.log(searchResult);
+
+    t.is(searchResult.length, 1, "Must return one item");
+
+    t.deepEqual(searchResult, [{
+      id: inserted_topic[0].id,
+      name: 'HTML & CSS',
+      week_number: 1,
+      week_name: 'Week #1'
+    }], "Must return topics matching the passed string ")
+
+
+  }
+
+);

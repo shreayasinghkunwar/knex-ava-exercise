@@ -9,6 +9,7 @@ test.beforeEach(async () => {
 
 // We use test.serial so that tests are run one after another and we dont run into problems with duplicate primary key insertion
 // The default behavior of ava is to run tests parallelly.
+
 test.serial("insertWeek > Returns the inserted week", async (t) => {
   t.plan(1);
   // Try to insert a week in the database
@@ -32,6 +33,7 @@ test.serial(
       "number",
       1
     );
+
     t.deepEqual(
       dbQueryResult,
       [{ number: 1, name: "Week #1" }],
@@ -55,9 +57,82 @@ test.serial(
   }
 );
 
-test.todo("insertWeeks > Returns the inserted weeks");
-test.todo("insertWeeks > Weeks are actually inserted in the database");
-test.todo(
-  "insertWeeks > Throws when an existing week number is inserted again"
+test.serial(
+  'insertWeeks > Returns the inserted weeks', async (t) => {
+    t.plan(2);
+    // Try to insert for many week in the database
+    const weeks = [{ number: 1, name: "Week #1" }, { number: 2, name: "Week #2" }, { number: 3, name: "Week #3" }]
+    const result = await weekModel.insertWeeks(weeks);
+    //console.log(result)
+    const expectedResult = [{ number: 1, name: "Week #1" }, { number: 2, name: "Week #2" }, { number: 3, name: "Week #3" }];
+
+    t.is(result.length, expectedResult.length, "Must return same numbers of data")
+
+    t.deepEqual(
+      result,
+      expectedResult,
+      "Must return the inserted objects in an array"
+    );
+  }
+)
+
+test.serial("insertWeeks > Weeks are actually inserted in the database",
+  async (t) => {
+    t.plan(2);
+    //  Inserting  weeks to the database for test
+    const weeks = [{ number: 1, name: "Week #1" }, { number: 2, name: "Week #2" }, { number: 3, name: "Week #3" }]
+    await weekModel.insertWeeks(weeks);
+
+    // Fetching the weeks from database
+    const dbQueryResults = await knex(weekModel.WEEK_TABLE_NAME).whereIn('number', [1, 2, 3])
+    //console.log(dbQueryResults)
+    t.is(weeks.length, dbQueryResults.length, "Must return same numbers of data");
+
+    t.deepEqual(
+      dbQueryResults,
+      [{ number: 1, name: "Week #1" }, { number: 2, name: "Week #2" }, { number: 3, name: "Week #3" }],
+      "Must return the inserted object from database"
+    );
+  }
+
+)
+
+test.serial(
+  "insertWeeks > Throws when an existing week number is inserted again",
+  async (t) => {
+    t.plan(1);
+    //  Inserting  weeks to the database for test
+    const weeks = [{ number: 1, name: "Week #1" }, { number: 2, name: "Week #2" }, { number: 3, name: "Week #3" }]
+    await weekModel.insertWeeks(weeks);
+    // Trying to  insert the weeks again
+    const weeks_data = [{ number: 1, name: "Week #1" }, { number: 2, name: "Week #2" }]
+    await t.throwsAsync(
+      () => weekModel.insertWeeks(weeks_data),
+      { instanceOf: Error },
+      "Must throw error if e the same weeks are inserted more than once"
+    );
+  }
 );
-test.todo("findAllWeeks > Returns all weeks in the database");
+
+test.serial("findAllWeeks > Returns all weeks in the database",
+  async (t) => {
+    t.plan(2);
+    //  Inserting  weeks to the database for test
+    const weeks = [{ number: 1, name: "Week #1" }, { number: 2, name: "Week #2" },
+    { number: 3, name: "Week #3" }, { number: 4, name: "Week #4" }]
+    await weekModel.insertWeeks(weeks);
+
+    // Fetching the weeks from database
+
+    const dbFindResults = await weekModel.findAllWeeks()
+    //console.log(dbQueryResults)
+    t.is(weeks.length, dbFindResults.length, "Must return same numbers of data");
+
+    t.deepEqual(
+      dbFindResults,
+      weeks,
+      "Must return all the data from database"
+    );
+
+  })
+

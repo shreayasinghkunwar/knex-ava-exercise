@@ -6,8 +6,9 @@ const weekModel = require("../week");
 test.beforeEach(async () => {
   // Clear the weeks and topics tables before each test so we don't have to worry about reinserting the same id
   // We have to clear the week table because topic depends on week
-  await knex(weekModel.WEEK_TABLE_NAME).del();
   await knex(topicModel.TOPIC_TABLE_NAME).del();
+  await knex(weekModel.WEEK_TABLE_NAME).del();
+
 });
 
 test.serial("insertForWeek > Returns the inserted topic", async (t) => {
@@ -31,6 +32,35 @@ test.serial("insertForWeek > Returns the inserted topic", async (t) => {
   t.is(insertedItem.name, expectedResult.name, "Must have correct name");
 });
 
+test.serial(
+  "insertForWeek > Topics are actually inserted in the database",
+  async (t) => {
+    t.plan(3);
+    //  inserting a topic to the database to test
+
+    await knex(weekModel.WEEK_TABLE_NAME).insert({ number: 1, name: "Week #1" });
+    await topicModel.insertForWeek(1, "HTML & CSS");
+    const dbQueryResult = await knex(topicModel.TOPIC_TABLE_NAME).where(
+      "week_number",
+      1
+    );
+
+    t.is(dbQueryResult.length, 1, "Must return one item");
+
+    const fetchData = dbQueryResult[0]
+    const expectedResult = { week_number: 1, name: "HTML & CSS" };
+
+    t.is(
+      fetchData.week_number,
+      expectedResult.week_number,
+      "Must have correct week number"
+    );
+    t.is(fetchData.name, expectedResult.name, "Must have correct name");
+  }
+);
+
+
+/*
 test.todo("insertForWeek > Returns the inserted weeks");
 test.todo("insertForWeek > Topics are actually inserted in the database");
 test.todo(
@@ -48,3 +78,4 @@ test.todo(
   "deleteTopicById > Deletes the topic whose id is passed as an argument"
 );
 test.todo("deleteTopicById > Does not throw when deleting non-existent topic");
+*/

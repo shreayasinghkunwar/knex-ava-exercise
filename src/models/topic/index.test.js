@@ -76,8 +76,6 @@ test.serial(
       1
     );
 
-
-
     t.is(dbQueryResult.length, 1, "Must return one item");
 
     const fetchData = dbQueryResult[0]
@@ -96,4 +94,18 @@ test.serial(
   }
 );
 
+test.serial(
+  "insertForWeek > Throws when trying to insert a topic for a non existent week",
+  async (t) => {
+
+
+    await t.throwsAsync(
+      async () => await topicModel.insertForWeek(1, "HTML & CSS"),
+      { instanceOf: Error },
+      "Must throw when trying to insert a topic for a non existent week"
+    );
+
+
+  }
+);
 

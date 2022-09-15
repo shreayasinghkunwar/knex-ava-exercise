@@ -154,7 +154,6 @@ test.serial(
     const week = await insertWeek(1, "Week #1", instructor.id)
     const inserted_topic = await topicModel.insertForWeek(1, "HTML & CSS");
     const searchResult = await topicModel.searchTopicWithWeekData("HTML & CSS");
-    console.log(searchResult);
 
     t.is(searchResult.length, 1, "Must return one item");
 
@@ -165,7 +164,17 @@ test.serial(
       week_name: 'Week #1'
     }], "Must return topics matching the passed string ")
 
-
   }
+);
 
+test.serial(
+  "searchTopicWithWeekData > Returns empty array if no topics match the query",
+  async (t) => {
+    t.plan(1);
+    const instructor = await getInstructor("Ramesh KC")
+    const week = await insertWeek(1, "Week #1", instructor.id)
+    const inserted_topic = await topicModel.insertForWeek(1, "HTML & CSS");
+    const searchResult = await topicModel.searchTopicWithWeekData("HTML & JS");
+    t.is(searchResult.length, 0, "Must return empty array if topic doesnt exists")
+  }
 );

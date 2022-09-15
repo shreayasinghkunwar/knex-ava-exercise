@@ -109,3 +109,21 @@ test.serial(
   }
 );
 
+test.serial("updateTopicById > Returns the updated topic", async (t) => {
+  t.plan(1);
+  //  inserting a topic to the database to test
+  const instructor = await getInstructor("Ramesh KC")
+  const week = await insertWeek(1, "Week #1", instructor.id)
+  const inserted_topic = await topicModel.insertForWeek(1, "HTML & CSS");
+
+  const updated_topic = await topicModel.updateTopicById(inserted_topic[0].id,
+    { name: "HTML, CSS & JS" })
+  const expectedResult = [{
+    id: inserted_topic[0].id, name: "HTML, CSS & JS",
+    week_number: 1
+  }]
+
+  t.deepEqual(updated_topic, expectedResult, "Must return updated topic")
+
+
+});

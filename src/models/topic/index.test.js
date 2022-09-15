@@ -178,3 +178,15 @@ test.serial(
     t.is(searchResult.length, 0, "Must return empty array if topic doesnt exists")
   }
 );
+
+test.serial(
+  "deleteTopicById > Deletes the topic whose id is passed as an argument", async (t) => {
+    const instructor = await getInstructor("Bibek Aryal")
+    const week = await insertWeek(1, "Week #1", instructor.id)
+    const inserted_topic = await topicModel.insertForWeek(1, "HTML & CSS");
+    const deletedItem = await topicModel.deleteTopicById(inserted_topic[0].id);
+
+    t.is(deletedItem, 1, "Must delete the topic whose id is passed")
+  }
+);
+

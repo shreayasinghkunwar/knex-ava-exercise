@@ -6,8 +6,8 @@ function getTableQueryBuilder() {
   return knex(WEEK_TABLE_NAME);
 }
 
-function insertWeek(number, name) {
-  return getTableQueryBuilder().insert({ number, name }).returning("*");
+function insertWeek(number, name, instructor_id) {
+  return getTableQueryBuilder().insert({ number, name, instructor_id }).returning("*");
 }
 
 /**

@@ -39,17 +39,18 @@ test.serial("insertForWeek > Returns the inserted topic", async (t) => {
   // We setup the test by inserting a topic to the database
 
   const instructor = await getInstructor("Bibek Aryal")
-
   const week = await insertWeek(1, "Week #1", instructor.id)
 
   const result = await topicModel.insertForWeek(week.number, "HTML & CSS");
   t.is(result.length, 1, "Must return one item");
 
   const insertedItem = result[0];
-  t.true(
-    insertedItem.id && insertedItem.id.length === 36,
-    "Must generate an id of 36 characters in length (which is the standard for UUID used by Postgres)"
+
+  t.true(/^[0-9a-fA-F]{8}\b-[0-9a-fA-F]{4}\b-[0-9a-fA-F]{4}\b-[0-9a-fA-F]{4}\b-[0-9a-fA-F]{12}$/.test(insertedItem.id)
+    ,
+    "Must generate an id of 36 characters in length in the standard format for UUID used by Postgres)"
   );
+
 
   const expectedResult = { week_number: 1, name: "HTML & CSS" };
   t.is(
@@ -60,4 +61,39 @@ test.serial("insertForWeek > Returns the inserted topic", async (t) => {
 
   t.is(insertedItem.name, expectedResult.name, "Must have correct name");
 });
+
+test.serial(
+  "insertForWeek > Topics are actually inserted in the database",
+  async (t) => {
+    t.plan(4);
+    //  inserting a topic to the database to test
+    const instructor = await getInstructor("Bibek Aryal")
+    const week = await insertWeek(1, "Week #1", instructor.id)
+
+    await topicModel.insertForWeek(1, "HTML & CSS");
+    const dbQueryResult = await knex(topicModel.TOPIC_TABLE_NAME).where(
+      "week_number",
+      1
+    );
+
+
+
+    t.is(dbQueryResult.length, 1, "Must return one item");
+
+    const fetchData = dbQueryResult[0]
+    t.true(/^[0-9a-fA-F]{8}\b-[0-9a-fA-F]{4}\b-[0-9a-fA-F]{4}\b-[0-9a-fA-F]{4}\b-[0-9a-fA-F]{12}$/.test(fetchData.id)
+      ,
+      "Must generate an id of 36 characters in length in the standard format for UUID used by Postgres)"
+    );
+    const expectedResult = { week_number: 1, name: "HTML & CSS" };
+
+    t.is(
+      fetchData.week_number,
+      expectedResult.week_number,
+      "Must have correct week number"
+    );
+    t.is(fetchData.name, expectedResult.name, "Must have correct name");
+  }
+);
+
 

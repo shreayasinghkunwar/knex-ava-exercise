@@ -190,3 +190,15 @@ test.serial(
   }
 );
 
+test.serial("deleteTopicById > Does not throw when deleting non-existent topic",
+  async (t) => {
+    const instructor = await getInstructor("Bibek Aryal")
+    const week = await insertWeek(1, "Week #1", instructor.id)
+    const inserted_topic = await topicModel.insertForWeek(1, "HTML & CSS");
+    const deletedItem = await topicModel.deleteTopicById(inserted_topic[0].id);
+
+    await t.notThrowsAsync(
+      () => topicModel.deleteTopicById(inserted_topic[0].id),
+      "Must not throw error when  deleting non-existent topic"
+    )
+  });

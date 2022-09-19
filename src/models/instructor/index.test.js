@@ -1,10 +1,14 @@
 const test = require("ava");
 const { knex } = require("../../database");
 const instructorModel = require(".");
+const topicModel = require("../topic");
+const weekModel = require("../week")
 
 
 test.beforeEach(async () => {
     // Clearing the instructor table before each test 
+    await knex(topicModel.TOPIC_TABLE_NAME).del();
+    await knex(weekModel.WEEK_TABLE_NAME).del();
     await knex(instructorModel.INSTRUCTOR_TABLE_NAME).del();
 });
 
@@ -91,7 +95,7 @@ test.serial(
 );
 
 
-test.serial("updateInstructorById > returns updated topic ", async (t) => {
+test.serial("updateInstructorById > returns updated instructor ", async (t) => {
     t.plan(2);
 
 
@@ -117,7 +121,7 @@ test.serial("updateInstructorById > returns updated topic ", async (t) => {
 
 });
 
-test.serial("updateInstructorById > Updates a topic", async (t) => {
+test.serial("updateInstructorById > Updates a instructor", async (t) => {
 
     t.plan(2);
     await setupTestData();

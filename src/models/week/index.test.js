@@ -112,7 +112,7 @@ test.serial("insertWeeks > Weeks are actually inserted in the database",
     // Fetching the weeks from database
     const dbQueryResults = await knex(weekModel.WEEK_TABLE_NAME).whereIn
       ('number', [1, 2, 3])
-    //console.log(dbQueryResults)
+    //console.log(dbQueryResults.length)
     t.is(3, dbQueryResults.length, "Must return same numbers of data");
 
     t.deepEqual(

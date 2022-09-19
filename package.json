@@ -4,7 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "node ./scripts/clear-database.js && ava"
+    "test": "node ./scripts/clear-database.js && ava --concurrency 1"
   },
   "author": "",
   "license": "ISC",
